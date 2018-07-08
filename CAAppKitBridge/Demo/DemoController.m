@@ -29,6 +29,7 @@
 @implementation DemoController
 - (void) applicationDidFinishLaunching: (id)t
 {
+#if 0
   NSView * view = [[NSView alloc] init];
   NSView * view2 = [[NSView alloc] init];
   NSView * view3 = [[NSView alloc] init];
@@ -67,6 +68,7 @@
   NSLog(@"Success: %d", [view2 _gsRemoveCARenderer]);
   NSLog(@"removeCARenderer from non-root layer %p", view3);
   NSLog(@"Success: %d" , [view3 _gsRemoveCARenderer]);
+#endif
 
   /* Test the drawing into the context */
   NSWindow *window = [[NSWindow alloc] initWithContentRect: NSMakeRect(0,0,800,600)
@@ -74,9 +76,9 @@
                                           backing: NSBackingStoreBuffered
                                             defer: NO];
   NSView * mainView = [[NSView alloc] initWithFrame: [[window contentView] frame]];
-  [mainView setWantsLayer: YES];
-  NSLog(@"mainView wantsLayer value: %d", [view wantsLayer]);
   [window setContentView: mainView];
+  [mainView setWantsLayer: YES];
+  NSLog(@"mainView wantsLayer value: %d", [mainView wantsLayer]);
   [window makeKeyAndOrderFront: nil];
 
   NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval: 1./60. 
