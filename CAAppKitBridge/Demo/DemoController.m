@@ -77,8 +77,19 @@
   [mainView setWantsLayer: YES];
   NSLog(@"mainView wantsLayer value: %d", [view wantsLayer]);
   [window setContentView: mainView];
+  [window makeKeyAndOrderFront: nil];
 
+  NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval: 1./60. 
+                                                    target: self 
+                                                  selector: @selector(drawRect:) 
+                                                  userInfo: mainView 
+                                                   repeats: YES];
+}
 
+-(void) drawRect: (NSTimer*)t
+{
+  NSView *mainView = t.userInfo;
+  NSLog(@"mainView is at %p", mainView);
   [[mainView _gsCreateOpenGLContext] makeCurrentContext];
 
   glViewport(0, 0, [mainView frame].size.width, [mainView frame].size.height);
@@ -109,8 +120,6 @@
   glFlush();
 
   [[mainView _gsCreateOpenGLContext] flushBuffer];
-
-  [window makeKeyAndOrderFront: nil];
 }
 
 -(BOOL)applicationShouldTerminateAfterLastWindowClosed: (id)sender
