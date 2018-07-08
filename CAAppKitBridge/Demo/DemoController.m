@@ -91,6 +91,7 @@
   NSView *mainView = t.userInfo;
   NSLog(@"mainView is at %p", mainView);
   [[mainView _gsCreateOpenGLContext] makeCurrentContext];
+  NSLog(@"Context is at %p", [mainView _gsCreateOpenGLContext]);
 
   glViewport(0, 0, [mainView frame].size.width, [mainView frame].size.height);
   glClear(GL_COLOR_BUFFER_BIT);

@@ -129,8 +129,8 @@
   if (currGLContext == nil)
     {
       NSOpenGLContext *context = [[NSOpenGLContext alloc] 
-                                     initWithFormat: currGSCAData->_pixelFormat
-                                     shareContext: nil];
+                                  initWithFormat: [NSOpenGLView defaultPixelFormat]
+                                    shareContext: nil];
 
       ASSIGN(currGLContext, context);
       [context setView: self];
