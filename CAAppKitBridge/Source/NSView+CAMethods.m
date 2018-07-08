@@ -131,17 +131,11 @@
       NSOpenGLContext *context = [[NSOpenGLContext alloc] 
                                   initWithFormat: [NSOpenGLView defaultPixelFormat]
                                     shareContext: nil];
-
       ASSIGN(currGLContext, context);
+      ASSIGN(currGSCAData->_GLContext, currGLContext);
       [context setView: self];
     }
   return currGLContext;
-}
-
-- (NSOpenGLPixelFormat*) pixelFormat
-{
-  GSCAData *currGSCAData = self->_coreAnimationData;
-  return currGSCAData->_pixelFormat;
 }
 
 - (BOOL) isOpaque

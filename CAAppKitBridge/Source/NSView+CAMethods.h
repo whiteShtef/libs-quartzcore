@@ -38,5 +38,4 @@
 - (NSOpenGLContext*) _gsCreateOpenGLContext;
 - (NSOpenGLContext*) _gsGetOpenGLContext;
 
-
 @end
