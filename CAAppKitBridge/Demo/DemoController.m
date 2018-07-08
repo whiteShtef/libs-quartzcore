@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-/* Demo/DemoController.
-=======
 /* Demo/DemoController.m
->>>>>>> 3c5e7c5e49fdb15cdcb1227dc2115e17b269a335
 
    Copyright (C) 2018 Free Software Foundation, Inc.
 
@@ -70,12 +66,50 @@
   NSLog(@"removeCARenderer from root layer %p", view2);
   NSLog(@"Success: %d", [view2 _gsRemoveCARenderer]);
   NSLog(@"removeCARenderer from non-root layer %p", view3);
-  NSLog(@"Success: %d" ,[view3 _gsRemoveCARenderer]);
+  NSLog(@"Success: %d" , [view3 _gsRemoveCARenderer]);
 
+  /* Test the drawing into the context */
   NSWindow *window = [[NSWindow alloc] initWithContentRect: NSMakeRect(0,0,800,600)
                                         styleMask: NSTitledWindowMask | NSClosableWindowMask
                                           backing: NSBackingStoreBuffered
                                             defer: NO];
+  NSView * mainView = [[NSView alloc] initWithFrame: [[window contentView] frame]];
+  [mainView setWantsLayer: YES];
+  NSLog(@"mainView wantsLayer value: %d", [view wantsLayer]);
+  [window setContentView: mainView];
+
+
+  [[mainView _gsCreateOpenGLContext] makeCurrentContext];
+
+  glViewport(0, 0, [mainView frame].size.width, [mainView frame].size.height);
+  glClear(GL_COLOR_BUFFER_BIT);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_COLOR_ARRAY);
+  GLfloat vertices[] = {
+    0.0, 0.0,
+    1.0, 0.0,
+    1.0, 1.0,
+  };
+  GLfloat colors[] = {
+    1.0, 0.0, 0.0, 1.0,
+    0.0, 1.0, 0.0, 1.0,
+    0.0, 0.0, 1.0, 1.0,
+  };
+  glVertexPointer(2, GL_FLOAT, 0, vertices);
+  glColorPointer(3, GL_FLOAT, 0, colors);
+
+  glDrawArrays(GL_TRIANGLES, 0, 6);
+
+  glFlush();
+
+  [[mainView _gsCreateOpenGLContext] flushBuffer];
+
   [window makeKeyAndOrderFront: nil];
 }
 
