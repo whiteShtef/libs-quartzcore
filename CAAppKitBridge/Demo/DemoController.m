@@ -27,6 +27,11 @@
 #import "DemoController.h"
 
 @implementation DemoController
+
+@synthesize window=_window;
+@synthesize mainView=_mainView;
+@synthesize renderer=_renderer;
+
 - (void) applicationDidFinishLaunching: (id)t
 {
 #if 0
@@ -71,31 +76,33 @@
 #endif
 
   /* Test the drawing into the context */
-  NSWindow *window = [[NSWindow alloc] initWithContentRect: NSMakeRect(0,0,800,600)
+  self->_window = [[NSWindow alloc] initWithContentRect: NSMakeRect(0,0,800,600)
                                         styleMask: NSTitledWindowMask | NSClosableWindowMask
                                           backing: NSBackingStoreBuffered
                                             defer: NO];
-  NSView * mainView = [[NSView alloc] initWithFrame: [[window contentView] frame]];
-  [window setContentView: mainView];
-  [mainView setWantsLayer: YES];
-  NSLog(@"mainView wantsLayer value: %d", [mainView wantsLayer]);
-  [window makeKeyAndOrderFront: nil];
+  self->_mainView = [[NSButton alloc] initWithFrame: [[self->_window contentView] frame]];
+  [self->_mainView setTitle: @"hello"];
+  [self->_window setContentView: self->_mainView];
+  [self->_mainView setWantsLayer: YES];
+  NSLog(@"mainView wantsLayer value: %d", [self->_mainView wantsLayer]);
+  [self->_window makeKeyAndOrderFront: nil];
 
+  /* set up the NSTimer */
   NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval: 1./60. 
                                                     target: self 
                                                   selector: @selector(drawRect:) 
-                                                  userInfo: mainView 
+                                                  userInfo: nil
                                                    repeats: YES];
+
 }
 
 -(void) drawRect: (NSTimer*)t
 {
-  NSView *mainView = t.userInfo;
-  NSLog(@"mainView is at %p", mainView);
-  [[mainView _gsCreateOpenGLContext] makeCurrentContext];
-  NSLog(@"Context is at %p", [mainView _gsCreateOpenGLContext]);
-
-  glViewport(0, 0, [mainView frame].size.width, [mainView frame].size.height);
+  NSLog(@"mainView is at %p", self->_mainView);
+  [[self->_mainView _gsCreateOpenGLContext] makeCurrentContext];
+  NSLog(@"Context is at %p", [self->_mainView _gsCreateOpenGLContext]);
+#if 0
+  glViewport(0, 0, [self->_mainView frame].size.width, [self->_mainView frame].size.height);
   glClear(GL_COLOR_BUFFER_BIT);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -106,14 +113,20 @@
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_COLOR_ARRAY);
   GLfloat vertices[] = {
-    0.0, 0.0,
-    1.0, 0.0,
-    1.0, 1.0,
+    -0.5, 0.0,
+     0.5, 0.0,
+     0.5, 0.5,
+     0.5, 0.5,
+    -0.5, 0.5,
+    -0.5, 0.0,
   };
   GLfloat colors[] = {
     1.0, 0.0, 0.0, 1.0,
     0.0, 1.0, 0.0, 1.0,
     0.0, 0.0, 1.0, 1.0,
+    0.0, 0.0, 1.0, 1.0,
+    1.0, 0.0, 0.0, 1.0,
+    0.0, 1.0, 0.0, 1.0,
   };
   glVertexPointer(2, GL_FLOAT, 0, vertices);
   glColorPointer(3, GL_FLOAT, 0, colors);
@@ -122,7 +135,12 @@
 
   glFlush();
 
-  [[mainView _gsCreateOpenGLContext] flushBuffer];
+  [[self->_mainView _gsCreateOpenGLContext] flushBuffer];
+
+  //[self->_renderer render];
+#endif
+  [self->_renderer render];
+
 }
 
 -(BOOL)applicationShouldTerminateAfterLastWindowClosed: (id)sender

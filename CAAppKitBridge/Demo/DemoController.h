@@ -35,5 +35,12 @@
 
 @interface DemoController : NSObject
 {
+  NSWindow   *_window;
+  NSView     * _mainView;
+  CARenderer * _renderer;
 }
+
+@property NSWindow *window;
+@property NSView *mainView;
+@property CARenderer *renderer;
 @end
