@@ -76,14 +76,6 @@
     }
 }
 
-- (void) setNeedsDisplay
-{
-  if (self->_coreAnimationData != nil)
-    {
-      [[self _gsLayer] setNeedsDisplay];
-    }
-}
-
 - (void)drawLayer: (CALayer *)layer 
         inContext: (CGContextRef)ctx
 {

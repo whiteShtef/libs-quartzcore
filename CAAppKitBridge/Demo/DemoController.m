@@ -98,9 +98,6 @@
 
 -(void) drawRect: (NSTimer*)t
 {
-  NSLog(@"mainView is at %p", self->_mainView);
-  [[self->_mainView _gsCreateOpenGLContext] makeCurrentContext];
-  NSLog(@"Context is at %p", [self->_mainView _gsCreateOpenGLContext]);
 #if 0
   glViewport(0, 0, [self->_mainView frame].size.width, [self->_mainView frame].size.height);
   glClear(GL_COLOR_BUFFER_BIT);
@@ -136,10 +133,14 @@
   glFlush();
 
   [[self->_mainView _gsCreateOpenGLContext] flushBuffer];
-
-  //[self->_renderer render];
 #endif
-  [self->_renderer render];
+
+  NSLog(@"mainView is at %p", self->_mainView);
+  //[[self->_mainView _gsCreateOpenGLContext] makeCurrentContext];
+  NSLog(@"Context is at %p", [self->_mainView _gsCreateOpenGLContext]);
+  NSLog(@"_gsLayer %p", [self->_mainView _gsLayer]);
+  [[self->_mainView _gsLayer] setNeedsDisplay];
+  //[self->_renderer render];
 
 }
 

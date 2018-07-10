@@ -31,7 +31,6 @@
 @interface  NSView (CAmethods)
 @property BOOL wantsLayer;
 - (CALayer *) makeBackingLayer;
-- (void) setNeedsDisplay; // TODO(stjepanbrkicc): make _needsDisplay ivar
 - (void)drawLayer: (CALayer *)layer 
         inContext: (CGContextRef)ctx;
 
